@@ -11,6 +11,7 @@ class ZipLocation {
 
   const GOOGLE_API_URL = 'http://maps.googleapis.com/maps/api/geocode/json';
   const GOOGLE_API_ZIP_PARAM = 'address';
+  const GOOGLE_RESPONSE_STATUS_OK = 'OK';
 
   /**
    * @var null|int
@@ -27,8 +28,8 @@ class ZipLocation {
    * @throws Exception
    */
   public function __construct($zip) {
-    if(! (int)$zip == $zip || ! is_numeric($zip))
-      throw new Exception('ZIP must be integer');
+    if(! (int)$zip == $zip || ! is_numeric($zip) || $zip < 0)
+      throw new Exception('ZIP must be integer and positive');
 
     $this->_zip = $zip;
   }
@@ -74,10 +75,11 @@ class ZipLocation {
   private function validateData($data) {
     $dataObject = json_decode($data);
 
-    foreach($dataObject->results as $result)
-      foreach($result->address_components as $addressComponent)
-        if(in_array('postal_code', $addressComponent->types) && $addressComponent->short_name == $this->_zip)
-          return $result;
+    if($dataObject && $dataObject->status == self::GOOGLE_RESPONSE_STATUS_OK)
+      foreach($dataObject->results as $result)
+        foreach($result->address_components as $addressComponent)
+          if(in_array('postal_code', $addressComponent->types) && $addressComponent->short_name == $this->_zip)
+            return $result;
 
     throw new Exception('Cant find location with zip '.$this->_zip);
   }
