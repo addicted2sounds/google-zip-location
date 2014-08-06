@@ -18,7 +18,7 @@ class ZipLocation {
   private $_zip = null;
 
   /**
-   * @var null|array
+   * @var null|stdClass
    */
   private $_data = null;
 
@@ -27,7 +27,7 @@ class ZipLocation {
    * @throws Exception
    */
   public function __construct($zip) {
-    if(! is_int($zip))
+    if(! (int)$zip == $zip || ! is_numeric($zip))
       throw new Exception('ZIP must be integer');
 
     $this->_zip = $zip;
@@ -64,14 +64,28 @@ class ZipLocation {
     $data = curl_exec($ch);
     curl_close($ch);
 
-    $this->_data = json_decode($data);
-    return  $this->_data;
+    $this->_data = $this->validateData($data);
+  }
+
+  /**
+   * @param $data stdClass
+   * @throws Exception
+   */
+  private function validateData($data) {
+    $dataObject = json_decode($data);
+
+    foreach($dataObject->results as $result)
+      foreach($result->address_components as $addressComponent)
+        if(in_array('postal_code', $addressComponent->types) && $addressComponent->short_name == $this->_zip)
+          return $result;
+
+    throw new Exception('Cant find location with zip '.$this->_zip);
   }
 
   /**
    * @return array
    */
-  public function getLocationArray() {
+  public function getLocation() {
     return $this->getData();
   }
 
