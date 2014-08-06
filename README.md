@@ -1,4 +1,7 @@
 google-zip-location
 ===================
 
-library connected with google.api. created to get location by zip
+Library connected with google.api. Helps easily get location by zip
+
+Usage
+===================
