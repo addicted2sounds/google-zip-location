@@ -56,8 +56,10 @@ class ZipLocation {
    * @return array
    */
   private function sendRequest() {
+    $getString = http_build_query(array(self::GOOGLE_API_ZIP_PARAM => $this->_zip));
+
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, self::GOOGLE_API_URL);
+    curl_setopt($ch, CURLOPT_URL, self::GOOGLE_API_URL.'?'.$getString);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $data = curl_exec($ch);
     curl_close($ch);
