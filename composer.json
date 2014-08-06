@@ -1,0 +1,9 @@
+{
+  "name": "astolovitskiy/google-zip-location",
+  "description": "Library connected with google.api. Created to get location by zip",
+  "keywords": ["google-zip-location"],
+  "type": "php-extension",
+  "require": {
+    "php": ">=5.3.2"
+  }
+}
