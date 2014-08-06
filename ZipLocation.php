@@ -64,7 +64,7 @@ class ZipLocation {
     $data = curl_exec($ch);
     curl_close($ch);
 
-    $this->_data = json_encode($data);
+    $this->_data = json_decode($data);
     return  $this->_data;
   }
 
