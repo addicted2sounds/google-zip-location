@@ -64,7 +64,7 @@ class ZipLocation {
     $data = curl_exec($ch);
     curl_close($ch);
 
-    $this->_data = $data;
+    $this->_data = json_encode($data);
     return  $this->_data;
   }
 
@@ -76,5 +76,3 @@ class ZipLocation {
   }
 
 }
-
-$zipLocation = ZipLocation::setZip(11);
